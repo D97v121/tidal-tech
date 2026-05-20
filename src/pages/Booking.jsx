@@ -35,7 +35,7 @@ function Booking() {
     description: '',
     agreed: false,
   })
-clearImmediate
+
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
 
