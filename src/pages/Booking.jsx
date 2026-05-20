@@ -1,19 +1,19 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const services = [
-  'WiFi Troubleshooting - $70',
-  'New Router Setup - $85',
-  'WiFi Extender Setup - $75',
-  'New iPhone or Android Setup - $80',
-  'New Mac or PC Setup - $100',
-  'Smart TV Setup - $85',
-  'New Printer Setup - $70',
-  'Account or Password Recovery - $65',
-  'Virus or Malware Removal - $100',
-  'Computer Cleanup and Optimization - $85',
-  'Data Backup Setup - $80',
-  'Phone to Phone Data Transfer - $85',
-  'Smart Home Device Setup - $50 per device',
+  'WiFi Troubleshooting - $35',
+  'New Router Setup - $35',
+  'WiFi Extender Setup - $30',
+  'New iPhone or Android Setup - $35',
+  'New Mac or PC Setup - $35',
+  'Smart TV Setup - $40',
+  'New Printer Setup - $30',
+  'Account or Password Recovery - $30',
+  'Virus or Malware Removal - $40',
+  'Computer Cleanup and Optimization - $35',
+  'Data Backup Setup - $40',
+  'Phone to Phone Data Transfer - $35',
+  'Smart Home Device Setup - $30 per device',
   'Other / Not Sure - Hourly Rate Applies',
 ]
 
@@ -37,7 +37,9 @@ function Booking() {
   })
 
   const [submitted, setSubmitted] = useState(false)
-  const [loading, setLoading] = useState(false)
+  useEffect(() => {
+  fetch('https://tidal-tech-server.onrender.com/api/booking')
+}, [])
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target
