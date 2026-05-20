@@ -37,9 +37,11 @@ function Booking() {
   })
 
   const [submitted, setSubmitted] = useState(false)
-  useEffect(() => {
-  fetch('https://tidal-tech-server.onrender.com/api/booking')
-}, [])
+  const [loading, setLoading] = useState(false)
+
+    useEffect(() => {
+    fetch('https://tidal-tech-server.onrender.com/api/booking')
+    }, [])
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target
