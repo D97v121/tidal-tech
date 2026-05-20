@@ -14,7 +14,7 @@ app.post('/api/booking', async (req, res) => {
 
   try {
     await resend.emails.send({
-      from: 'onboarding@resend.dev',
+      from: 'davy.renee11@gmail.com',
       to: process.env.EMAIL_USER,
       subject: `New Booking Request - ${name}`,
       text: `
@@ -32,7 +32,7 @@ Details: ${description || 'None provided'}
     })
 
     await resend.emails.send({
-      from: 'onboarding@resend.dev',
+      from: 'davy.renee11@gmail.com',
       to: email,
       subject: 'Your Tidal Tech Appointment Request',
       text: `
