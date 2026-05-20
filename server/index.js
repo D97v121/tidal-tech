@@ -1,30 +1,23 @@
 const express = require('express')
-const nodemailer = require('nodemailer')
 const cors = require('cors')
+const { Resend } = require('resend')
 require('dotenv').config()
 
 const app = express()
 app.use(cors())
 app.use(express.json())
 
-const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 587,
-  secure: false,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-})
+const resend = new Resend(process.env.RESEND_API_KEY)
 
 app.post('/api/booking', async (req, res) => {
   const { name, phone, email, address, date, time, service, description } = req.body
 
-  const mailToMe = {
-    from: process.env.EMAIL_USER,
-    to: process.env.EMAIL_USER,
-    subject: `New Booking Request - ${name}`,
-    text: `
+  try {
+    await resend.emails.send({
+      from: 'onboarding@resend.dev',
+      to: process.env.EMAIL_USER,
+      subject: `New Booking Request - ${name}`,
+      text: `
 New booking request from Tidal Tech website:
 
 Name: ${name}
@@ -35,14 +28,14 @@ Date: ${date}
 Time: ${time}
 Service: ${service}
 Details: ${description || 'None provided'}
-    `,
-  }
+      `,
+    })
 
-  const mailToClient = {
-    from: process.env.EMAIL_USER,
-    to: email,
-    subject: 'Your Tidal Tech Appointment Request',
-    text: `
+    await resend.emails.send({
+      from: 'onboarding@resend.dev',
+      to: email,
+      subject: 'Your Tidal Tech Appointment Request',
+      text: `
 Hi ${name},
 
 Thanks for reaching out to Tidal Tech. Your appointment request has been received.
@@ -59,13 +52,10 @@ Remember -- you pay only when its fixed.
 
 Davy
 Tidal Tech
-davy.renee11@gmail.com
-    `,
-  }
+davy@tidaltechco.com
+      `,
+    })
 
-  try {
-    await transporter.sendMail(mailToMe)
-    await transporter.sendMail(mailToClient)
     res.status(200).json({ message: 'Booking received' })
   } catch (error) {
     console.error(error)
