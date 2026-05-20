@@ -16,7 +16,7 @@ app.post('/api/booking', async (req, res) => {
 
   try {
     await resend.emails.send({
-      from: 'davy.renee11@gmail.com',
+      from: 'davy@tidaltechco.com',
       to: process.env.EMAIL_USER,
       subject: `New Booking Request - ${name}`,
       text: `
@@ -34,7 +34,7 @@ Details: ${description || 'None provided'}
     })
 
     await resend.emails.send({
-      from: 'davy.renee11@gmail.com',
+      from: 'davy@tidaltechco.com',
       to: email,
       subject: 'Your Tidal Tech Appointment Request',
       text: `
@@ -48,7 +48,7 @@ Date: ${date}
 Time: ${time}
 Address: ${address}
 
-I will reach out within 24 hours to confirm your appointment and go over pricing before the visit.
+I will reach out within 24 hours to confirm your appointment and pricing.
 
 Remember -- you pay only when its fixed.
 

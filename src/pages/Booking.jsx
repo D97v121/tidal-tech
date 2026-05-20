@@ -81,8 +81,8 @@ function Booking() {
         <div className="text-center max-w-md">
           <div className="text-5xl mb-4">✅</div>
           <h2 className="text-3xl font-bold text-gray-800 mb-4">Booking Received</h2>
-          <p className="text-gray-600 mb-2">Thanks {form.name}, your appointment request has been sent.</p>
-          <p className="text-gray-600 mb-6">Davy will reach out to confirm your appointment and let you know pricing before the visit.</p>
+          <p className="text-gray-600 mb-2">Thanks {form.name}, your request has been sent.</p>
+          <p className="text-gray-600 mb-6">Davy will reach out to confirm your appointment pricing.</p>
           <p className="text-sm text-gray-400">Questions? Email davy@tidaltechco.com</p>
         </div>
       </div>
