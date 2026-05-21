@@ -14,12 +14,12 @@ function Home() {
         </div>
         <h1 className="text-5xl font-bold mb-4 text-slate-700">Tech Help That Comes to You</h1>
         <p className="text-xl mb-2 text-slate-500">Serving Malibu and surrounding areas</p>
-        <p className="text-2xl font-semibold mb-8 text-teal-500">You pay only when its fixed.</p>
+        <p className="text-2xl font-semibold mb-8 text-teal-500">You pay only when it's fixed.</p>
         <div className="flex justify-center gap-4 flex-wrap">
           <Link to="/booking" className="bg-teal-500 text-white px-8 py-3 rounded-lg font-bold hover:bg-teal-600 transition text-lg">
             Book an Appointment
           </Link>
-          <a href="tel:+1XXXXXXXXXX" className="border-2 border-teal-500 text-teal-600 px-8 py-3 rounded-lg font-bold hover:bg-teal-50 transition text-lg">
+          <a href="tel:5092307002" className="border-2 border-teal-500 text-teal-600 px-8 py-3 rounded-lg font-bold hover:bg-teal-50 transition text-lg">
             Call Us
           </a>
         </div>
@@ -49,10 +49,10 @@ function Home() {
           <h2 className="text-3xl font-bold text-slate-700 mb-6">Why Tidal Tech</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
             {[
-              { title: 'You pay only when its fixed', desc: 'No fix, no charge. Simple as that.' },
-              { title: 'We come to you', desc: 'No need to drive anywhere. We show up at your door.' },
-              { title: 'Pepperdine CS Student', desc: 'Trained, trustworthy, and part of the Malibu community.' },
-              { title: 'Fully insured', desc: 'Peace of mind every time we step through your door.' },
+              { title: 'We come to your home', desc: 'No driving or waiting in line.' },
+              { title: 'Friendly and patient', desc: 'We explain everything clearly' },
+              { title: 'You pay only when it is fixed', desc: 'No fix, no charge' },
+              { title: 'Local and Trustworth', desc: 'Pepperdine computer science student' },
             ].map((item) => (
               <div key={item.title} className="bg-white rounded-xl p-6 shadow-sm border border-slate-100">
                 <h3 className="font-bold text-slate-700 mb-1">{item.title}</h3>
@@ -63,6 +63,7 @@ function Home() {
         </div>
       </section>
 
+    {/* 
       <section className="max-w-4xl mx-auto px-6 pt-10 py-20">
         <h2 className="text-3xl font-bold text-center text-slate-700 mb-12">What People Are Saying</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -78,8 +79,9 @@ function Home() {
           ))}
         </div>
       </section>
-
-      <section className="bg-gradient-to-b from-blue-50 to-slate-100 text-center px-6 py-20">
+      add this to the section below in className: from-blue-50 to-slate-100
+      */} 
+      <section className="bg-gradient-to-b text-center px-6 py-20">
         <h2 className="text-3xl font-bold mb-4 text-slate-700">Ready to get your tech working?</h2>
         <p className="text-slate-500 mb-8 text-lg">Book online or give us a call. We will take it from there.</p>
         <Link to="/booking" className="bg-teal-500 text-white px-8 py-3 rounded-lg font-bold hover:bg-teal-600 transition text-lg">
