@@ -1,26 +1,21 @@
 import { useState, useEffect } from 'react'
+import { supabase } from '../supabaseClient'
 
 const services = [
-  'WiFi Troubleshooting',
-  'New Router Setup',
-  'WiFi Extender Setup',
-  'New iPhone or Android Setup',
-  'New Mac or PC Setup',
-  'Smart TV Setup',
-  'New Printer Setup',
-  'Account or Password Recovery',
-  'Virus or Malware Removal',
-  'Computer Cleanup and Optimization',
-  'Data Backup Setup',
-  'Phone to Phone Data Transfer',
-  'Smart Home Device Setup',
+  'WiFi Troubleshooting - $40',
+  'New Router Setup - $40',
+  'WiFi Extender Setup - $35',
+  'New iPhone or Android Setup - $40',
+  'New Mac or PC Setup - $40',
+  'Smart TV Setup - $45',
+  'New Printer Setup - $35',
+  'Account or Password Recovery - $35',
+  'Virus or Malware Removal - $45',
+  'Computer Cleanup and Optimization - $40',
+  'Data Backup Setup - $35',
+  'Phone to Phone Data Transfer - $40',
+  'Smart Home Device Setup - $35',
   'Other / Not Sure',
-]
-
-const timeSlots = [
-  '9:00 AM', '10:00 AM', '11:00 AM',
-  '12:00 PM', '1:00 PM', '2:00 PM',
-  '3:00 PM', '4:00 PM',
 ]
 
 function Booking() {
@@ -31,6 +26,7 @@ function Booking() {
     address: '',
     date: '',
     time: '',
+    requestedTime: '',
     service: '',
     description: '',
     agreed: false,
@@ -38,18 +34,23 @@ function Booking() {
 
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [availability, setAvailability] = useState([])
+const [availableTimes, setAvailableTimes] = useState([])
 
   useEffect(() => {
     fetch('https://tidal-tech-server.onrender.com/api/booking')
-  }, [])
+    fetchAvailability()
+    }, [])
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target
-    setForm((prev) => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value,
-    }))
-  }
+    const fetchAvailability = async () => {
+    const { data, error } = await supabase
+        .from('availability')
+        .select('*')
+        .eq('is_available', true)
+        .order('date', { ascending: true })
+
+    if (!error) setAvailability(data)
+    }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -74,6 +75,23 @@ function Booking() {
       setLoading(false)
     }
   }
+
+const handleDateChange = (e) => {
+  const selectedDate = e.target.value
+  setForm((prev) => ({ ...prev, date: selectedDate, time: '' }))
+  const timesForDate = availability
+    .filter((slot) => slot.date === selectedDate)
+    .map((slot) => slot.time)
+  setAvailableTimes(timesForDate)
+}
+
+const handleChange = (e) => {
+  const { name, value, type, checked } = e.target
+  setForm((prev) => ({
+    ...prev,
+    [name]: type === 'checkbox' ? checked : value,
+  }))
+}
 
   if (submitted) {
     return (
@@ -168,31 +186,49 @@ function Booking() {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-1">Preferred Date</label>
+                <label className="block text-sm font-semibold text-slate-700 mb-1">Date</label>
                 <input
-                  type="date"
-                  name="date"
-                  required
-                  value={form.date}
-                  onChange={handleChange}
-                  className="w-full border border-slate-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white"
+                    type="date"
+                    name="date"
+                    required
+                    value={form.date}
+                    onChange={handleDateChange}
+                    min={new Date().toISOString().split('T')[0]}
+                    className="w-full border border-slate-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white"
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-1">Preferred Time</label>
+                <label className="block text-sm font-semibold text-slate-700 mb-1">Time</label>
                 <select
-                  name="time"
-                  required
-                  value={form.time}
-                  onChange={handleChange}
-                  className="w-full border border-slate-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white"
-                >
-                  <option value="">Select a time</option>
-                  {timeSlots.map((slot) => (
-                    <option key={slot} value={slot}>{slot}</option>
-                  ))}
+                    name="time"
+                    required
+                    value={form.time}
+                    onChange={handleChange}
+                    disabled={!form.date}
+                    className="w-full border border-slate-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white disabled:opacity-50"
+                    >
+                    <option value="">
+                        {form.date ? availableTimes.length === 0 ? 'No times available' : 'Select a time' : 'Select a date first'}
+                    </option>
+                    {availableTimes.map((t) => (
+                        <option key={t} value={t}>{t}</option>
+                    ))}
                 </select>
               </div>
+            </div>
+
+            <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-1">
+                    None of the listed times work? Request a different time
+                </label>
+                <input
+                    type="text"
+                    name="requestedTime"
+                    value={form.requestedTime || ''}
+                    onChange={handleChange}
+                    placeholder="e.g. Friday afternoon or weekday mornings"
+                    className="w-full border border-slate-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white"
+                />
             </div>
 
             <div>
@@ -240,7 +276,7 @@ function Booking() {
               className="mt-1 accent-teal-500"
             />
             <label htmlFor="agreed" className="text-sm text-slate-500">
-              I understand that payment is due upon completion of service and that Tidal Tech is not responsible for pre-existing damage or data loss. I agree to the Tidal Tech service terms.
+                I understand that payment is due upon completion of service and that Tidal Tech is not responsible for pre-existing damage or data loss. I agree to the <a href="/terms" target="_blank" className="text-teal-500 underline hover:text-teal-600">Tidal Tech service terms</a>.
             </label>
           </div>
 
