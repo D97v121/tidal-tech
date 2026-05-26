@@ -35,7 +35,9 @@ function Booking() {
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
   const [availability, setAvailability] = useState([])
-const [availableTimes, setAvailableTimes] = useState([])
+    const [availableTimes, setAvailableTimes] = useState([])
+    const [calendarMonth, setCalendarMonth] = useState(new Date())
+    const [calendarDays, setCalendarDays] = useState([])    
 
   useEffect(() => {
     fetch('https://tidal-tech-server.onrender.com/api/booking')
@@ -51,6 +53,17 @@ const [availableTimes, setAvailableTimes] = useState([])
 
     if (!error) setAvailability(data)
     }
+
+    useEffect(() => {
+        const year = calendarMonth.getFullYear()
+        const month = calendarMonth.getMonth()
+        const firstDay = new Date(year, month, 1).getDay()
+        const daysInMonth = new Date(year, month + 1, 0).getDate()
+        const days = []
+        for (let i = 0; i < firstDay; i++) days.push(null)
+        for (let d = 1; d <= daysInMonth; d++) days.push(new Date(year, month, d))
+        setCalendarDays(days)
+    }, [calendarMonth])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -184,37 +197,85 @@ const handleChange = (e) => {
           <div className="bg-slate-50 rounded-xl p-6 border border-slate-100 space-y-6">
             <h2 className="text-lg font-bold text-slate-700">Appointment Details</h2>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-1">Date</label>
-                <input
-                    type="date"
-                    name="date"
-                    required
-                    value={form.date}
-                    onChange={handleDateChange}
-                    min={new Date().toISOString().split('T')[0]}
-                    className="w-full border border-slate-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-1">Time</label>
-                <select
-                    name="time"
-                    required
-                    value={form.time}
-                    onChange={handleChange}
-                    disabled={!form.date}
-                    className="w-full border border-slate-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white disabled:opacity-50"
+            <div>
+            <label className="block text-sm font-semibold text-slate-700 mb-2">Select a Date</label>
+
+            <div className="bg-white rounded-xl border border-slate-200 p-4">
+                <div className="flex justify-between items-center mb-4">
+                <button
+                    type="button"
+                    onClick={() => setCalendarMonth(new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() - 1))}
+                    className="text-slate-400 hover:text-teal-600 font-bold text-lg px-2 cursor-pointer"
+                >
+                    &#8249;
+                </button>
+                <span className="font-semibold text-slate-700">
+                    {calendarMonth.toLocaleString('default', { month: 'long', year: 'numeric' })}
+                </span>
+                <button
+                    type="button"
+                    onClick={() => setCalendarMonth(new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1))}
+                    className="text-slate-400 hover:text-teal-600 font-bold text-lg px-2 cursor-pointer"
+                >
+                    &#8250;
+                </button>
+                </div>
+
+                <div className="grid grid-cols-7 gap-1 mb-2">
+                {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((d) => (
+                    <div key={d} className="text-center text-xs font-semibold text-slate-400 py-1">{d}</div>
+                ))}
+                </div>
+
+                <div className="grid grid-cols-7 gap-1">
+                {calendarDays.map((day, index) => {
+                    if (!day) return <div key={index} />
+                    const dateStr = day.toISOString().split('T')[0]
+                    const isAvailable = availability.some((slot) => slot.date === dateStr)
+                    const isSelected = form.date === dateStr
+                    const isPast = day < new Date(new Date().setHours(0, 0, 0, 0))
+
+                    return (
+                    <button
+                        key={dateStr}
+                        type="button"
+                        disabled={!isAvailable || isPast}
+                        onClick={() => handleDateChange({ target: { value: dateStr } })}
+                        className={`
+                        rounded-lg py-2 text-sm font-medium transition cursor-pointer
+                        ${isSelected ? 'bg-teal-500 text-white' : ''}
+                        ${isAvailable && !isSelected && !isPast ? 'bg-teal-50 text-teal-700 hover:bg-teal-100 border border-teal-200' : ''}
+                        ${!isAvailable || isPast ? 'text-slate-300 cursor-not-allowed' : ''}
+                        `}
                     >
-                    <option value="">
-                        {form.date ? availableTimes.length === 0 ? 'No times available' : 'Select a time' : 'Select a date first'}
-                    </option>
+                        {day.getDate()}
+                    </button>
+                    )
+                })}
+                </div>
+            </div>
+            <input type="hidden" name="date" value={form.date} required />
+
+            {form.date && (
+                <div className="mt-4">
+                <label className="block text-sm font-semibold text-slate-700 mb-2">Select a Time</label>
+                <div className="grid grid-cols-4 gap-2">
                     {availableTimes.map((t) => (
-                        <option key={t} value={t}>{t}</option>
+                    <button
+                        key={t}
+                        type="button"
+                        onClick={() => setForm((prev) => ({ ...prev, time: t }))}
+                        className={`
+                        rounded-lg py-2 text-sm font-medium border transition cursor-pointer
+                        ${form.time === t ? 'bg-teal-500 text-white border-teal-500' : 'bg-white text-slate-600 border-slate-200 hover:border-teal-400 hover:text-teal-600'}
+                        `}
+                    >
+                        {t}
+                    </button>
                     ))}
-                </select>
-              </div>
+                </div>
+                </div>
+            )}
             </div>
 
             <div>
