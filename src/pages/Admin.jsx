@@ -18,6 +18,7 @@ function Admin() {
   const [time, setTime] = useState('')
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
+  const [type, setType] = useState('inperson')
 
   useEffect(() => {
     if (authed) fetchSlots()
@@ -42,24 +43,23 @@ function Admin() {
     }
   }
 
-  const handleAdd = async () => {
+    const handleAdd = async () => {
     if (!date || !time) return
     setLoading(true)
     const { error } = await supabase
-      .from('availability')
-      .insert([{ date, time, is_available: true }])
-
+        .from('availability')
+        .insert([{ date, time, is_available: true, type }])
     if (!error) {
-      setMessage('Slot added successfully')
-      setDate('')
-      setTime('')
-      fetchSlots()
+        setMessage('Slot added successfully')
+        setDate('')
+        setTime('')
+        fetchSlots()
     } else {
-      setMessage('Something went wrong')
+        setMessage('Something went wrong')
     }
     setLoading(false)
     setTimeout(() => setMessage(''), 3000)
-  }
+    }
 
   const handleDelete = async (id) => {
     const { error } = await supabase
@@ -106,30 +106,41 @@ function Admin() {
 
         <div className="bg-slate-50 rounded-xl p-6 border border-slate-100 space-y-4">
           <h2 className="text-lg font-bold text-slate-700">Add a New Slot</h2>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-1">Date</label>
-              <input
+                <label className="block text-sm font-semibold text-slate-700 mb-1">Type</label>
+                <select
+                value={type}
+                onChange={(e) => setType(e.target.value)}
+                className="w-full border border-slate-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white"
+                >
+                <option value="inperson">In-Person</option>
+                <option value="phone">Phone Support</option>
+                </select>
+            </div>
+            <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-1">Date</label>
+                <input
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
                 className="w-full border border-slate-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white"
-              />
+                />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-1">Time</label>
-              <select
+                <label className="block text-sm font-semibold text-slate-700 mb-1">Time</label>
+                <select
                 value={time}
                 onChange={(e) => setTime(e.target.value)}
                 className="w-full border border-slate-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white"
-              >
+                >
                 <option value="">Select a time</option>
                 {timeOptions.map((t) => (
-                  <option key={t} value={t}>{t}</option>
+                    <option key={t} value={t}>{t}</option>
                 ))}
-              </select>
+                </select>
             </div>
-          </div>
+            </div>
           {message && <p className="text-teal-600 text-sm font-semibold">{message}</p>}
           <button
             onClick={handleAdd}
@@ -151,7 +162,8 @@ function Admin() {
                   <div>
                     <p className="font-semibold text-slate-700">{slot.date}</p>
                     <p className="text-sm text-slate-500">{slot.time}</p>
-                  </div>
+                    <p className="text-xs text-teal-500 font-semibold mt-1">{slot.type === 'phone' ? 'Phone Support' : 'In-Person'}</p>
+                </div>
                   <button
                     onClick={() => handleDelete(slot.id)}
                     className="text-red-400 hover:text-red-600 text-sm font-semibold transition cursor-pointer"
