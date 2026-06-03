@@ -1,12 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../supabaseClient'
 
-const timeOptions = [
-  '9:00 AM', '10:00 AM', '11:00 AM',
-  '12:00 PM', '1:00 PM', '2:00 PM',
-  '3:00 PM', '4:00 PM',
-]
-
 const PASSWORD = 'tidaltech2026'
 
 function Admin() {

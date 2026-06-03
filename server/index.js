@@ -304,7 +304,7 @@ app.post('/api/phone-support', async (req, res) => {
             </div>
             <div style="background: #e8f4f4; border-radius: 10px; padding: 16px 24px; margin: 0 0 24px 0;">
               <p style="color: #1d6e6a; font-size: 14px; margin: 0; font-weight: bold;">This call is completely free.</p>
-              <p style="color: #3d9b95; font-size: 13px; margin: 4px 0 0 0;">30 minutes, no cost, no commitment. If the issue needs more time or an in-person visit, Davy will let you know -- no surprises.</p>
+              <p style="color: #3d9b95; font-size: 13px; margin: 4px 0 0 0;">30 minutes, no cost, no commitment. If the issue needs more time or an in-person visit, Davy will let you know.</p>
             </div>
             <p style="color: #444; font-size: 14px; line-height: 1.8;">If you need to reschedule or have any questions, feel free to reply to this email or call or text directly.</p>
             <p style="color: #1a1a1a; font-size: 14px; margin: 24px 0 0 0;">Talk soon,</p>
