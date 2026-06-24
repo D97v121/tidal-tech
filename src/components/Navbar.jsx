@@ -31,10 +31,10 @@ function Navbar() {
         scrolled ? 'bg-background/85 backdrop-blur border-b border-border/60' : 'bg-transparent'
       }`}
     >
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py--2 lg:px-8">
         {/* Logo */}
         <Link to="/" className="shrink-0">
-          <img src="/logo-full.png" alt="Tidal Tech" className="h-16 w-auto" />
+          <img src="/logo-full.png" alt="Tidal Tech" className="h-22 w-auto" />
         </Link>
 
         {/* Desktop nav */}

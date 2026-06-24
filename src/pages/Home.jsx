@@ -165,11 +165,11 @@ function Home() {
 
       {/* ABOUT DAVY */}
       <section className="bg-gradient-coast">
-        <div className="mx-auto max-w-2xl px-6 py-24 lg:px-8 lg:py-32">
+        <div className="mx-auto max-w-2xl px-6 pt-5 pb-24 lg:px-8 lg:pt-0 lg:pb-32">
           <div className="flex justify-center">
-            <img src="/logo-icon.png" alt="Tidal Tech" className="h-32 w-auto wave-drift" />
+            <img src="/logo-icon.png" alt="Tidal Tech" className="h-32 w-auto wave-drift py-0" />
           </div>
-          <p className="mt-8 text-center text-sm uppercase tracking-[0.3em] text-primary-deep">About Davy</p>
+          <p className="mt-4 text-center lg:-mt-2 text-sm uppercase tracking-[0.3em] text-primary-deep">About Davy</p>
           <h2 className="mt-4 text-center font-serif text-4xl sm:text-5xl">Hi, I'm Davy.</h2>
           <div className="mt-8 space-y-6 text-left text-lg leading-relaxed text-muted-foreground">
             <p>

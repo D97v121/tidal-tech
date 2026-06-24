@@ -47,29 +47,35 @@ function PhoneSupport() {
       .map((row) => row.time)
     setAvailableTimes(times)
   }
+  const [submitting, setSubmitting] = useState(false)
 
   const handleSubmit = async () => {
-    const payload = {
-      name,
-      phone,
-      email,
-      preferredContact: channel[0] ?? '',
-      devices: device,
-      description: issue,
-      date: date ? date.toISOString().split('T')[0] : '',
-      time: time ?? '',
-      requestedTime: altTime,
-    }
+    setSubmitting(true)
+    try {
+      const payload = {
+        name,
+        phone,
+        email,
+        preferredContact: channel[0] ?? '',
+        devices: device,
+        description: issue,
+        date: date ? date.toISOString().split('T')[0] : '',
+        time: time ?? '',
+        requestedTime: altTime,
+      }
 
-    const response = await fetch('https://tidal-tech-server.onrender.com/api/phone-support', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    })
+      const response = await fetch('https://tidal-tech-server.onrender.com/api/phone-support', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
 
-    if (!response.ok) {
-      alert('Something went wrong. Please try again or call (509) 230-7002 directly.')
-      throw new Error('Submission failed')
+      if (!response.ok) {
+        alert('Something went wrong. Please try again or call (509) 230-7002 directly.')
+        throw new Error('Submission failed')
+      }
+    } finally {
+      setSubmitting(false)
     }
   }
 
@@ -89,6 +95,7 @@ function PhoneSupport() {
         <StepForm
           submitLabel="Schedule My Free Call"
           onSubmit={handleSubmit}
+          submitting={submitting}
           steps={[
             {
               title: 'Who am I talking to?',

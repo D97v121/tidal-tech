@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Check, ChevronLeft, ChevronRight } from 'lucide-react'
 
-export function StepForm({ steps, onSubmit, submitLabel = 'Submit' }) {
+export function StepForm({ steps, onSubmit, submitLabel = 'Submit', submitting = false }) {
   const [i, setI] = useState(0)
   const [done, setDone] = useState(false)
   const total = steps.length
@@ -57,23 +57,24 @@ export function StepForm({ steps, onSubmit, submitLabel = 'Submit' }) {
           <ChevronLeft className="h-4 w-4" /> Back
         </button>
         <button
-          type="button"
-          onClick={async () => {
-            if (isLast) {
-              try {
-                await onSubmit()
-                setDone(true)
-              } catch {
-                // onSubmit threw — stay on form, alert already shown
-              }
-            } else {
-              setI((v) => v + 1)
-            }
-          }}
-          className="inline-flex items-center gap-2 rounded-full bg-gradient-tide px-6 py-3 text-sm font-medium text-primary-foreground shadow-tide transition-transform hover:scale-[1.02]"
-        >
-          {isLast ? submitLabel : 'Continue'}
-          {!isLast && <ChevronRight className="h-4 w-4" />}
+            type="button"
+            disabled={submitting}
+            onClick={async () => {
+                if (isLast) {
+                try {
+                    await onSubmit()
+                    setDone(true)
+                } catch {
+                    // stay on form
+                }
+                } else {
+                setI((v) => v + 1)
+                }
+            }}
+            className="inline-flex items-center gap-2 rounded-full bg-gradient-tide px-6 py-3 text-sm font-medium text-primary-foreground shadow-tide transition-transform hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
+            >
+            {submitting ? 'Sending...' : isLast ? submitLabel : 'Continue'}
+            {!isLast && !submitting && <ChevronRight className="h-4 w-4" />}
         </button>
       </div>
     </div>

@@ -64,6 +64,7 @@ function Booking() {
       .map((row) => row.time)
     setAvailableTimes(times)
   }
+  const [submitting, setSubmitting] = useState(false)
 
   const handleSubmit = async () => {
     if (!agree) {
@@ -71,28 +72,31 @@ function Booking() {
       throw new Error('Must agree to terms')
     }
 
-    const payload = {
-      name,
-      phone,
-      email,
-      address,
-      date: date ? date.toISOString().split('T')[0] : '',
-      time: time ?? '',
-      requestedTime: altTime,
-      service,
-      description: details,
-      agreed: agree,
-    }
+    setSubmitting(true)
 
-    const response = await fetch('https://tidal-tech-server.onrender.com/api/booking', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    })
+    try {
+      const payload = {
+        name, phone, email, address,
+        date: date ? date.toISOString().split('T')[0] : '',
+        time: time ?? '',
+        requestedTime: altTime,
+        service,
+        description: details,
+        agreed: agree,
+      }
 
-    if (!response.ok) {
-      alert('Something went wrong. Please try again or email davy@tidaltechco.com directly.')
-      throw new Error('Submission failed')
+      const response = await fetch('https://tidal-tech-server.onrender.com/api/booking', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+
+      if (!response.ok) {
+        alert('Something went wrong. Please try again or email davy@tidaltechco.com directly.')
+        throw new Error('Submission failed')
+      }
+    } finally {
+      setSubmitting(false)
     }
   }
 
@@ -109,6 +113,7 @@ function Booking() {
         <StepForm
           submitLabel="Request Appointment"
           onSubmit={handleSubmit}
+          submitting={submitting}
           steps={[
             {
               title: 'Your information',
