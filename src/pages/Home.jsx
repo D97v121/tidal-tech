@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Phone, PhoneCall, CalendarCheck, Router, ShieldCheck, Ear, MessageSquareOff, ReceiptText, Clock } from 'lucide-react'
+import { Phone, PhoneCall, CalendarCheck, Router, ShieldCheck, Ear, MessageSquareOff, ReceiptText, Clock, Star } from 'lucide-react'
 
 const services = [
   {
@@ -43,6 +43,11 @@ const services = [
     to: '/booking',
   },
 ]
+
+const testimonials = [
+  { quote: "Davy showed up on time, is very responsible, did the job seamlessly & quick, she knows what she's doing! Couldn't be happier! I highly recommend", who: "Diane, Old Agoura" },
+  { quote: "This Woman is fabulous! She helped me solve my computer problem right away! She is patient and very knowledgeable. I would highly recommend her service. I will be a return customer for sure. She is awesome!", who: "Darcy, Beverly Hills" },
+];
 
 const pillars = [
   { icon: ShieldCheck, title: 'Honest recommendations', body: 'We have no hidden interests and will never recommend something you do not need.' },
@@ -100,6 +105,26 @@ function Home() {
                 className="aspect-[3/4] h-full w-full object-cover"
               />
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SOCIAL PROOF */}
+      <section className="border-y border-border bg-card">
+        <div className="mx-auto max-w-7xl px-6 py-10 lg:px-8">
+          <div className="flex flex-col items-center gap-3 text-center">
+            <div className="flex items-center gap-1 text-primary-deep" aria-label="5 out of 5 stars">
+              {[0,1,2,3,4].map(i => <Star key={i} className="h-4 w-4 fill-current" />)}
+            </div>
+            <p className="text-sm uppercase tracking-[0.2em] text-muted-foreground">What clients are saying</p>
+          </div>
+          <div className="mt-8 grid gap-6 md:grid-cols-2">
+            {testimonials.map((t) => (
+              <figure key={t.who} className="rounded-2xl border border-border bg-background p-6 shadow-soft">
+                <blockquote className="font-serif text-lg leading-snug text-foreground">"{t.quote}"</blockquote>
+                <figcaption className="mt-4 text-sm text-muted-foreground">— {t.who}</figcaption>
+              </figure>
+            ))}
           </div>
         </div>
       </section>

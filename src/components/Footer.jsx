@@ -45,8 +45,8 @@ function Footer() {
 
       {/* Footer */}
       <footer className="border-t border-border bg-sand">
-        <div className="mx-auto flex max-w-7xl flex-col items-center gap-6 px-6 py-12 text-center">
-          <img src="/logo-full.png" alt="Tidal Tech" className="h-16 w-auto" />
+        <div className="mx-auto flex max-w-7xl flex-col items-center gap-2 px-6 py-0 pb-20 text-center">
+          <img src="/logo-full.png" alt="Tidal Tech" className="h-32 w-auto -mb-5" />
 
           <p className="text-sm text-muted-foreground">
             Malibu, CA &nbsp;·&nbsp;{' '}
